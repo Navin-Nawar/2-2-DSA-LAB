@@ -1,48 +1,98 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
- //it will be pivot
-int partition(vector<int>&arr,int st,int end){
-    int idx = st-1;
-    int pivit=arr[end];
-    for(int i=st; i<end;i++){
-        if(arr[i]<=pivit){
-             idx++;
-             swap(arr[i],arr[idx]);
+
+int partitionArray(int a[], int low, int high)
+{
+    int pivot = a[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++)
+    {
+        if (a[j] <= pivot)
+        {
+            i++;
+            swap(a[i], a[j]);
         }
     }
-    //for pivot in right position
-    idx++;
-    swap(arr[end],arr[idx]);
 
-    return idx;
+    swap(a[i + 1], a[high]);
+
+    return i + 1;
 }
 
-void quickSort(vector<int>& arr, int st, int end){
-    if(st<end){
-        int pivitIdx = partition(arr,st,end);
+void quickSort(int a[], int low, int high)
+{
+    if (low < high)
+    {
+        int p = partitionArray(a, low, high);
 
-        quickSort(arr,st,pivitIdx-1);//left partition
-        quickSort(arr,pivitIdx+1,end);//right partition
+        quickSort(a, low, p - 1);
+        quickSort(a, p + 1, high);
     }
 }
 
+int binarySearch(int a[], int n, int key)
+{
+    int low = 0;
+    int high = n - 1;
 
-int main() {
-    int n;
-    cout<<"Enter the elemnt of an array:";
-    cin>>n;
-    vector<int>arr(n);
-    for(int i=0; i<n; i++){
-        cin >> arr[i];
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+
+        if (a[mid] == key)
+            return mid;
+
+        else if (a[mid] < key)
+            low = mid + 1;
+
+        else
+            high = mid - 1;
     }
-    quickSort(arr,0,n-1);
-    cout<<"Sorted Array :" <<endl;
-    for(int i=0; i<n; i++){
-        cout << arr[i] <<" ";
+
+    return -1;
+}
+
+int main()
+{
+    int n, a[100], key;
+
+    cout << "Enter the number of elements: ";
+    cin >> n;
+
+    cout << "Enter the elements: ";
+
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
     }
+
+    cout << "Enter the element to search: ";
+    cin >> key;
+
+    quickSort(a, 0, n - 1);
+
+    cout << "Sorted array: ";
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+
+    int position = binarySearch(a, n, key);
+
+    if (position != -1)
+    {
+        cout << "\nElement found at position "
+             << position + 1 << endl;
+    }
+    else
+    {
+        cout << "\nElement not found in the array." << endl;
+    }
+
     return 0;
 }
-
 
 
 /*
